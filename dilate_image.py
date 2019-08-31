@@ -17,9 +17,7 @@ args = vars(ap.parse_args())
 # CSV Dillate image
 img = cv2.imread(args["image"], 0)
 kernel = np.ones((5, 5), np.uint8)
-erosion = cv2.erode(img, kernel, iterations=2)
+dilate = cv2.dilate(img, kernel, iterations=1)
 
 filename = "{}.png".format(os.getpid())
-cv2.imwrite(filename, erosion)
-
-# python erode_image.py - -image images/page_1.jpg
+cv2.imwrite(filename, dilate)
