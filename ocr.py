@@ -48,12 +48,14 @@ cv2.imwrite(filename, gray)
 # custom_oem_psm_config = r'--oem 3 --psm 6'
 custom_oem_psm_config = ''
 
-# text = pytesseract.image_to_string(Image.open(filename), lang='eng', config=custom_oem_psm_config)
-# text = pytesseract.image_to_osd(Image.open(filename), lang='eng', config=custom_oem_psm_config)
-text = pytesseract.image_to_data(Image.open(
+text = pytesseract.image_to_string(Image.open(
     filename), lang='eng', config=custom_oem_psm_config)
+# text = pytesseract.image_to_osd(Image.open(
+    # filename), lang='eng', config=custom_oem_psm_config)
+# text = pytesseract.image_to_data(Image.open(
+#   filename), lang='eng', config=custom_oem_psm_config)
 
-os.remove(filename)
+# os.remove(filename)
 print(text)
 
 # Get a searchable PDF
@@ -66,4 +68,6 @@ cv2.imshow("Output", gray)
 # cv2.waitKey(0)
 
 # Command to run
-# python ocr.py --image Guardian-1968-06-31.jpg --p blur
+# python ocr.py --image images/Guardian-1968-06-31.jpg --p blur
+# python ocr.py --image images/page_1.jpg --p blur
+#
