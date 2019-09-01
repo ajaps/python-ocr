@@ -16,8 +16,23 @@ args = vars(ap.parse_args())
 
 # CSV Dillate image
 img = cv2.imread(args["image"], 0)
-kernel = np.ones((5, 5), np.uint8)
+kernel = np.ones((7, 7), np.uint8)
 dilate = cv2.dilate(img, kernel, iterations=1)
 
 filename = "{}.png".format(os.getpid())
 cv2.imwrite(filename, dilate)
+
+
+# Example of adding any additional options.
+# custom_oem_psm_config = r'--oem 3 --psm 6'
+custom_oem_psm_config = ''
+
+text = pytesseract.image_to_string(Image.open(
+    filename), lang='eng', config=custom_oem_psm_config)
+# text = pytesseract.image_to_osd(Image.open(
+# filename), lang='eng', config=custom_oem_psm_config)
+# text = pytesseract.image_to_data(Image.open(
+#   filename), lang='eng', config=custom_oem_psm_config)
+
+# os.remove(filename)
+print(text)
