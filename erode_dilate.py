@@ -14,24 +14,30 @@ ap.add_argument("-p", "--preprocess", type=str, default="thresh",
                 help="type of preprocessing to be done")
 args = vars(ap.parse_args())
 
-# CSV Erode image
+# CSV Dillate image
 img = cv2.imread(args["image"], 0)
-kernel = np.ones((2, 2), np.uint8)
-erosion = cv2.erode(img, kernel, iterations=1)
+kernel = np.ones((6, 6), np.uint8)
+dilate = cv2.dilate(img, kernel, iterations=1)
 
 filename = "{}.png".format(os.getpid())
+cv2.imwrite(filename, dilate)
+
+# Erode Image
+img = cv2.imread(filename, 0)
+kernel = np.ones((3, 3), np.uint8)
+erosion = cv2.erode(img, kernel, iterations=1)
 cv2.imwrite(filename, erosion)
 
 # Example of adding any additional options.
 # custom_oem_psm_config = r'--oem 3 --psm 6'
-# custom_oem_psm_config = "-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 custom_oem_psm_config = ''
 
 text = pytesseract.image_to_string(Image.open(
     filename), lang='eng', config=custom_oem_psm_config)
-# config = "-c tessedit_char_whitelist=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+# text = pytesseract.image_to_osd(Image.open(
+# filename), lang='eng', config=custom_oem_psm_config)
+# text = pytesseract.image_to_data(Image.open(
+#   filename), lang='eng', config=custom_oem_psm_config)
 
 # os.remove(filename)
 print(text)
-
-# python erode_image.py - -image images/page_1.jpg
