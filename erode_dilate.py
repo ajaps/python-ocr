@@ -16,7 +16,7 @@ args = vars(ap.parse_args())
 
 # CSV Dillate image
 img = cv2.imread(args["image"], 0)
-kernel = np.ones((6, 6), np.uint8)
+kernel = np.ones((2, 2), np.uint8)
 dilate = cv2.dilate(img, kernel, iterations=1)
 
 filename = "{}.png".format(os.getpid())
