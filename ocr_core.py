@@ -14,4 +14,4 @@ def ocr_core(filename):
     return text
 
 
-print(ocr_core('images/Guardian-1968-06-31.jpg'))
+# print(ocr_core('images/Guardian-1968-06-31.jpg'))

@@ -3,7 +3,6 @@ from flask_restful import reqparse, Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
 from flask_jsonpify import jsonify
-# import "get_image_text"
 from get_image_text import Image_Ocr
 
 app = Flask(__name__)
