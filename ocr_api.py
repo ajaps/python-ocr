@@ -47,12 +47,15 @@ class Ocr_Text(Resource):
 class Return_Ocr_Text(Resource):
   def post(self):
     args = parser.parse_args()
-    print(args["image_url"])
-    result = {
-        'data': args["image_url"]
-    }
 
-    return jsonify(result)
+    # If image url is empty
+    if not args["image_url"]:
+      return jsonify({ 'error': 'Source image must be specified' })
+
+    Ocr_Engine = Image_Ocr(args["image_url"])
+    ocr_text = Ocr_Engine.get_text_from_image()
+
+    return jsonify(ocr_text)
 
 
 api.add_resource(Tracks, '/tracks')  # Route_2
