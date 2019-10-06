@@ -20,3 +20,5 @@ text = pytesseract.image_to_string(Image.open(
     args["image"]), lang='eng', config=custom_oem_psm_config)
 
 print(text)
+
+# python get-all-text.py --image 'images/page_1.jpg'

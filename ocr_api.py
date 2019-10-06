@@ -1,22 +1,16 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
+from flask_restful import reqparse, Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
 from flask_jsonpify import jsonify
+# import "get_image_text"
+from get_image_text import Image_Ocr
 
-db_connect = create_engine('sqlite:///chinook.db')
 app = Flask(__name__)
 api = Api(app)
 
-
-class Employees(Resource):
-    def get(self):
-        conn = db_connect.connect()  # connect to database
-        # This line performs query and returns json result
-        query = conn.execute("select * from employees")
-        # Fetches first column that is Employee ID
-        return {'employees': '[i[0] for i in query.cursor.fetchall()]'}
-
+parser = reqparse.RequestParser()
+parser.add_argument('image_url')
 
 class Tracks(Resource):
     def get(self):
@@ -39,10 +33,32 @@ class Employees_Name(Resource):
         }
         return jsonify(result)
 
+class Ocr_Text(Resource):
+  def get(self, file_name):
+    p = Image_Ocr(file_name)
+    ocr_text = p.get_text_from_image()
 
-api.add_resource(Employees, '/employees')  # Route_1
+    result = {
+        'data': ocr_text
+    }
+
+    return jsonify(result)
+
+class Return_Ocr_Text(Resource):
+  def post(self):
+    args = parser.parse_args()
+    print(args["image_url"])
+    result = {
+        'data': args["image_url"]
+    }
+
+    return jsonify(result)
+
+
 api.add_resource(Tracks, '/tracks')  # Route_2
 api.add_resource(Employees_Name, '/employees/<employee_id>')  # Route_3
+api.add_resource(Ocr_Text, '/image/<file_name>')  # Route_3
+api.add_resource(Return_Ocr_Text, '/ocr-image')  # Route_3 POST
 
 
 if __name__ == '__main__':
