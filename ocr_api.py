@@ -11,6 +11,7 @@ api = Api(app)
 parser = reqparse.RequestParser()
 parser.add_argument('image_url')
 
+
 class Tracks(Resource):
     def get(self):
         # result = {'data': [dict(zip(tuple(query.keys()), i))
@@ -32,29 +33,31 @@ class Employees_Name(Resource):
         }
         return jsonify(result)
 
+
 class Ocr_Text(Resource):
-  def get(self, file_name):
-    p = Image_Ocr(file_name)
-    ocr_text = p.get_text_from_image()
+    def get(self, file_name):
+        p = Image_Ocr(file_name)
+        ocr_text = p.get_text_from_image()
 
-    result = {
-        'data': ocr_text
-    }
+        result = {
+            'data': ocr_text
+        }
 
-    return jsonify(result)
+        return jsonify(result)
+
 
 class Return_Ocr_Text(Resource):
-  def post(self):
-    args = parser.parse_args()
+    def post(self):
+        args = parser.parse_args()
 
-    # If image url is empty
-    if not args["image_url"]:
-      return jsonify({ 'error': 'Source image must be specified' })
+        # If image url is empty
+        if not args["image_url"]:
+            return jsonify({'error': 'Source image must be specified'})
 
-    Ocr_Engine = Image_Ocr(args["image_url"])
-    ocr_text = Ocr_Engine.get_text_from_image()
+        Ocr_Engine = Image_Ocr(args["image_url"])
+        ocr_text = Ocr_Engine.get_text_from_image()
 
-    return jsonify(ocr_text)
+        return jsonify(ocr_text)
 
 
 api.add_resource(Tracks, '/tracks')  # Route_2
@@ -64,7 +67,7 @@ api.add_resource(Return_Ocr_Text, '/ocr-image')  # Route_3 POST
 
 
 if __name__ == '__main__':
-    app.run(port='5002')
+    app.run()
 
 # Run app
 # python ocr_api.py
