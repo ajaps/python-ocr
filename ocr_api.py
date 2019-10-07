@@ -65,7 +65,6 @@ api.add_resource(Employees_Name, '/employees/<employee_id>')  # Route_3
 api.add_resource(Ocr_Text, '/image/<file_name>')  # Route_3
 api.add_resource(Return_Ocr_Text, '/ocr-image')  # Route_3 POST
 
-
 if __name__ == '__main__':
     app.run()
 

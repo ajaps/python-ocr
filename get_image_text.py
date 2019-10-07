@@ -2,13 +2,10 @@
 # import the necessary packages
 from PIL import Image
 import pytesseract
-import argparse
-import cv2
-import os
-import numpy as np
-import io
 from urllib.request import urlopen
+import ssl
 
+ssl._create_default_https_context = ssl._create_unverified_context
 
 class Image_Ocr:
     def __init__(self, image_path):
@@ -18,11 +15,9 @@ class Image_Ocr:
         custom_oem_psm_config = ''
 
         try:
-            fd = urlopen(self.image_path).read()
-            image_file = io.BytesIO(fd)
-
+            image_file = Image.open(urlopen(self.image_path))
             text = pytesseract.image_to_string(
-                Image.open(image_file), lang='eng', config=custom_oem_psm_config
+                image_file, lang='eng', config=custom_oem_psm_config
             )
         except Exception as e:
             return {'error': e.message}
