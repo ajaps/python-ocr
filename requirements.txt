@@ -1,6 +1,5 @@
 aniso8601==8.0.0
 Click==7.0
-Django==2.2.6
 Flask==1.1.1
 Flask-Jsonpify==1.5.0
 Flask-RESTful==0.3.7
@@ -9,9 +8,9 @@ image==1.5.27
 itsdangerous==1.1.0
 Jinja2==2.10.3
 MarkupSafe==1.1.1
-numpy==1.17.2
-opencv-contrib-python-headless==4.1.1.26
-Pillow==6.2.0
+numpy==1.17.3
+opencv-contrib-python-headless==4.4.0.42
+Pillow==7.2.0
 pytesseract==0.3.0
 pytz==2019.2
 six==1.12.0
