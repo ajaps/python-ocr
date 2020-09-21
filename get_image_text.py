@@ -46,5 +46,23 @@ class Image_Ocr:
 
         return {'data': full_text, 'confidence': average}
 
+    def get_hOCR(self):
+        try:
+            pytesseract.pytesseract.run_tesseract(
+                self.image_path,
+                "output_hocr",extension='jpg',
+                lang=None,
+                config="--psm 4 -c tessedit_create_hocr=1"
+            )
+
+            file = open("output_hocr.hocr", "r") # Location where XML was saved
+            h_ocr = file.read()
+            file.close()
+
+            return h_ocr
+
+        except Exception as e:
+            return {'error': e}
+
 
 # python get-all-text.py --image 'images/page_1.jpg'
