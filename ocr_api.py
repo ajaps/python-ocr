@@ -45,6 +45,17 @@ class Ocr_Text(Resource):
 
         return jsonify(result)
 
+class Ocr_Text_And_Position(Resource):
+    def get(self, file_name):
+        p = Image_Ocr(file_name)
+        ocr_text_position = p.get_text_and_positions()
+
+        result = {
+            'data': ocr_text_position
+        }
+
+        return jsonify(result)
+
 
 class Return_Ocr_Text(Resource):
     def post(self):
@@ -78,6 +89,7 @@ api.add_resource(Employees_Name, '/employees/<employee_id>')  # Route_3
 api.add_resource(Ocr_Text, '/image/<file_name>')  # Route_3
 api.add_resource(Return_Ocr_Text, '/ocr-image')  # Route_3 POST
 api.add_resource(Return_hOcr, '/ocr-image')  # Route_3 GET - OCRing & Identifying page structure
+api.add_resource(Ocr_Text_And_Position, '/text-and-position')  # Route_3 GET - OCRing & word postion on page
 
 if __name__ == '__main__':
     app.run()

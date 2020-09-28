@@ -12,6 +12,19 @@ class Image_Ocr:
     def __init__(self, image_path):
         self.image_path = image_path
 
+    def get_text_and_positions(self):
+        custom_oem_psm_config = ''
+
+        try:
+            image_file = Image.open(urlopen(self.image_path))
+            text = pytesseract.image_to_data(
+                image_file, lang='eng', config=custom_oem_psm_config, output_type='dict'
+            )
+        except Exception as e:
+            return {'error': str(e)}
+
+        return {'raw_data': text}
+
     def get_text_from_image(self):
         custom_oem_psm_config = ''
 
@@ -24,7 +37,7 @@ class Image_Ocr:
             )
             
         except Exception as e:
-            return {'error': e.message}
+            return {'error': str(e)}
 
         confidence_array = []
         full_text = ""
@@ -62,7 +75,7 @@ class Image_Ocr:
             return h_ocr
 
         except Exception as e:
-            return {'error': e}
+            return {'error': str(e)}
 
 
 # python get-all-text.py --image 'images/page_1.jpg'
