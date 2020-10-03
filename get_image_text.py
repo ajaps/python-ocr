@@ -20,10 +20,16 @@ class Image_Ocr:
             text = pytesseract.image_to_data(
                 image_file, lang='eng', config=custom_oem_psm_config, output_type='dict'
             )
+            # print(text['text'])
         except Exception as e:
             return {'error': str(e)}
 
-        return {'raw_data': text}
+        # confidence_array = []
+        text_array = ' '.join(text['text']).split()
+        full_text = ' '.join(text_array)
+
+        return {'full_text': full_text, 'raw_data': text}
+        # return {'full_text': full_text, 'confidence': average, 'raw_data': text}
 
     def get_text_from_image(self):
         custom_oem_psm_config = ''
@@ -35,6 +41,7 @@ class Image_Ocr:
             text = pytesseract.image_to_data(
                 image_file, lang='eng', config=custom_oem_psm_config
             )
+            print(text)
             
         except Exception as e:
             return {'error': str(e)}
@@ -57,7 +64,7 @@ class Image_Ocr:
         average = sum(confidence_array) / len(confidence_array)
         print(average)
 
-        return {'data': full_text, 'confidence': average}
+        return {'full_text': full_text, 'confidence': average}
 
     def get_hOCR(self):
         try:
@@ -79,3 +86,5 @@ class Image_Ocr:
 
 
 # python get-all-text.py --image 'images/page_1.jpg'
+# image-link: https://pbs.twimg.com/media/DzLju9OXQAEhJy0?format=jpg&name=medium
+# image-link: https://media1.thehungryjpeg.com/thumbs2/ori_4529_f192d2ef3e2f252ee38a08005d68cd91a73983c9_old-newspapers-digital-paper-textures.jpg

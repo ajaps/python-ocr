@@ -46,16 +46,17 @@ class Ocr_Text(Resource):
         return jsonify(result)
 
 class Ocr_Text_And_Position(Resource):
-    def get(self, file_name):
-        p = Image_Ocr(file_name)
-        ocr_text_position = p.get_text_and_positions()
+    def get(self):
+        args = parser.parse_args()
 
-        result = {
-            'data': ocr_text_position
-        }
+        # If image url is empty
+        if not args["image_url"]:
+            return jsonify({'error': 'Source image must be specified'})
 
-        return jsonify(result)
+        Ocr_Engine = Image_Ocr(args["image_url"])
+        ocr_text = Ocr_Engine.get_text_and_positions()
 
+        return jsonify(ocr_text)
 
 class Return_Ocr_Text(Resource):
     def post(self):
