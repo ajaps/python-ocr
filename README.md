@@ -16,6 +16,11 @@
   ```
    pip3 install -r requirements.txt
   ```
+  
+- Add Installed dependency to requirements.txt
+  ```
+   pip3 freeze | grep -i mongoengine >> requirements.txt
+  ```
 
 ## Local Development
 
