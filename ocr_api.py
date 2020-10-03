@@ -45,6 +45,18 @@ class Ocr_Text(Resource):
 
         return jsonify(result)
 
+class Ocr_Text_And_Position(Resource):
+    def get(self):
+        args = parser.parse_args()
+
+        # If image url is empty
+        if not args["image_url"]:
+            return jsonify({'error': 'Source image must be specified'})
+
+        Ocr_Engine = Image_Ocr(args["image_url"])
+        ocr_text = Ocr_Engine.get_text_and_positions()
+
+        return jsonify(ocr_text)
 
 class Return_Ocr_Text(Resource):
     def post(self):
@@ -59,11 +71,26 @@ class Return_Ocr_Text(Resource):
 
         return jsonify(ocr_text)
 
+class Return_hOcr(Resource):
+    def get(self):
+        args = parser.parse_args()
+
+        # If image url is empty
+        if not args["image_url"]:
+            return jsonify({'error': 'Source image must be specified'})
+
+        Ocr_Engine = Image_Ocr(args["image_url"])
+        ocr_text = Ocr_Engine.get_hOCR()
+
+        return jsonify(ocr_text)
+
 
 api.add_resource(Tracks, '/tracks')  # Route_2
 api.add_resource(Employees_Name, '/employees/<employee_id>')  # Route_3
 api.add_resource(Ocr_Text, '/image/<file_name>')  # Route_3
 api.add_resource(Return_Ocr_Text, '/ocr-image')  # Route_3 POST
+api.add_resource(Return_hOcr, '/ocr-image')  # Route_3 GET - OCRing & Identifying page structure
+api.add_resource(Ocr_Text_And_Position, '/text-and-position')  # Route_3 GET - OCRing & word postion on page
 
 if __name__ == '__main__':
     app.run()
