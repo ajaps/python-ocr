@@ -1,6 +1,5 @@
 from flask import Flask, request
 from flask_restful import reqparse, Resource, Api
-from sqlalchemy import create_engine
 from json import dumps
 from flask_jsonpify import jsonify
 from scr.data import mongo_db
@@ -12,7 +11,10 @@ api = Api(app)
 
 parser = reqparse.RequestParser()
 parser.add_argument('image_url')
-
+parser.add_argument('year')
+parser.add_argument('month')
+parser.add_argument('day')
+parser.add_argument('page')
 
 class Tracks(Resource):
     def get(self):
@@ -53,13 +55,16 @@ class Ocr_Text_And_Position(Resource):
 
         # If image url is empty
         if not args["image_url"]:
-            return jsonify({'error': 'Source image must be specified'})
+            return jsonify({'error': 'Source imagemust be specified'})
+        if not args["page"]:
+            return jsonify({'error': 'page number must be specified'})
+        if not (args["year"] or args["month"] or args["day"]):
+            return jsonify({'error': 'year, month and day must be specified'})
 
         Ocr_Engine = Image_Ocr(args["image_url"])
         ocr_text = Ocr_Engine.get_text_and_positions()
 
-        newspaper = Paper(title='Using MongoEngine', content='See the tutorial')
-        newspaper.tags = ['mongodb', 'mongoengine']
+        newspaper = Paper(full_text=ocr_text['full_text'], page_number=args["page"], year=args["year"], month=args["month"], day=args["day"], **ocr_text['raw_data'])
         newspaper.save()
 
         return jsonify(ocr_text)
