@@ -1,8 +1,9 @@
 import os
 from flask import Flask, render_template, request
+from scr.data import mongo_db # initialize mongo DB
 
 # import our OCR function
-from ocr_core import ocr_core
+from scr.service import ocr_core
 
 # define a folder to store and later serve the images
 UPLOAD_FOLDER = '/static/uploads/'

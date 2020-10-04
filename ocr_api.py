@@ -3,7 +3,9 @@ from flask_restful import reqparse, Resource, Api
 from sqlalchemy import create_engine
 from json import dumps
 from flask_jsonpify import jsonify
-from get_image_text import Image_Ocr
+from scr.data import mongo_db
+from scr.service.image_ocr import Image_Ocr
+from scr.data.paper import Paper
 
 app = Flask(__name__)
 api = Api(app)
@@ -55,6 +57,10 @@ class Ocr_Text_And_Position(Resource):
 
         Ocr_Engine = Image_Ocr(args["image_url"])
         ocr_text = Ocr_Engine.get_text_and_positions()
+
+        newspaper = Paper(title='Using MongoEngine', content='See the tutorial')
+        newspaper.tags = ['mongodb', 'mongoengine']
+        newspaper.save()
 
         return jsonify(ocr_text)
 
