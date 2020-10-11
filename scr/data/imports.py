@@ -25,6 +25,6 @@ class File_Import(Document):
         if 'created' in kwargs:
             if kwargs['created']:
                 q = Queue(connection=conn)
-                result = q.enqueue(Ocr.perform_ocr, document.id, retry=Retry(max=2))
+                result = q.enqueue(Ocr.perform_ocr, document.id)
 
 signals.post_save.connect(File_Import.post_save, sender=File_Import)

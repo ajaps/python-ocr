@@ -5,9 +5,11 @@ from flask_jsonpify import jsonify
 from scr.data import mongo_db
 from scr.service.image_ocr import Image_Ocr
 from scr.data.imports import File_Import
+from scr.infrastructure.setup_elasticsearch import es
 
 app = Flask(__name__)
 api = Api(app)
+app.elasticsearch = es if es else None
 
 parser = reqparse.RequestParser()
 parser.add_argument('image_url')

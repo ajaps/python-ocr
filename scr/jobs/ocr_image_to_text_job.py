@@ -1,6 +1,7 @@
 from scr.service.image_ocr import Image_Ocr
 import scr.data.imports as model
 from scr.data import mongo_db
+from scr.infrastructure.setup_elasticsearch import es
 
 def perform_ocr(document_id):
     print('OCRing Document with ID: ' + str(document_id))
@@ -16,5 +17,8 @@ def perform_ocr(document_id):
             full_text += (x + ' ')
 
     ocr_text['raw_data']['full_text'] = full_text
+
+    # es.index(index='paper_archieve', id=1, body=ocr_text['raw_data'])
+    es.index(index='paper_archieve', id=1, body={'text': "AJOAPSHFGJ fdbshjg"})
 
     document.update(set__paper=ocr_text['raw_data'])
