@@ -1,7 +1,7 @@
 from mongoengine import Document, StringField, DateTimeField, IntField, EmbeddedDocumentField, ListField, signals
-from scr.data.papers import Paper
+from app.data.papers import Paper
 from datetime import datetime
-import scr.jobs.ocr_image_to_text_job as Ocr
+import app.jobs.ocr_image_to_text_job as Ocr
 from setup_queue import conn
 from rq import Queue, Retry
 

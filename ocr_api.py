@@ -2,10 +2,10 @@ from flask import Flask, request
 from flask_restful import reqparse, Resource, Api
 from json import dumps
 from flask_jsonpify import jsonify
-from scr.data import mongo_db
-from scr.service.image_ocr import Image_Ocr
-from scr.data.imports import File_Import
-from scr.infrastructure.setup_elasticsearch import es
+from app.data import mongo_db
+from app.service.image_ocr import Image_Ocr
+from app.data.imports import File_Import
+from app.infrastructure.setup_elasticsearch import es
 
 app = Flask(__name__)
 api = Api(app)
