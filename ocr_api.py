@@ -6,6 +6,7 @@ from app.data import mongo_db
 from app.service.image_ocr import Image_Ocr
 from app.data.imports import File_Import
 from app.infrastructure.setup_elasticsearch import es
+import re # required for finding words bounded by specific text
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,6 +18,7 @@ parser.add_argument('year')
 parser.add_argument('month')
 parser.add_argument('day')
 parser.add_argument('page')
+parser.add_argument('query')
 
 class Tracks(Resource):
     def get(self):
@@ -122,6 +124,57 @@ class Get_Record(Resource):
 
         return jsonify(frank.paper.full_text)
 
+class Search(Resource):
+    def get(self):
+        args = parser.parse_args()
+
+        # If search phrase is empty
+        if not args["query"]:
+            return jsonify({'error': '[query] search phrase/text must be specified'})
+
+        body = {
+            "query": {
+                "match": {
+                "full_text": args["query"]
+                }
+            },
+            "highlight": {
+                "fields": {
+                "full_text": {}
+                }
+            }
+        }
+
+        search = es.search(body=body, index="paper_archive", doc_type="_doc")
+        results = search["hits"]["hits"]
+        formatted_result = []
+
+        for doc in results:
+            source = doc["_source"]
+            height = source["height"]
+            raw_text = source["raw_text"]
+            top = source["top"]
+            width = source["width"]
+            left = source["left"]
+            array_of_highlights = []
+            for highlight_text in doc["highlight"]["full_text"]:
+                highlited_word = re.findall('<em>.*?</em>', highlight_text)
+                for extracted_word in highlited_word: 
+                    try:
+                        extact_word = extracted_word.replace("<em>", "").replace("</em>", "")
+                        index = raw_text.index(extact_word)
+                        array_of_highlights.append({ "word": extact_word, "height": height[index], "top": top[index], "width": width[index], "left": left[index] })
+                    except ValueError:
+                        # catching this exception is necessary because I saw trailling commas in the array, ES returned and highlighted the word
+                        # but checking the word in the array breaks because the word in the array had a trailling comma(,) while highlighted word did not.
+                        print("Did not find" + extact_word + "in the array of document ID" + doc["_id"])
+                    
+            
+            formatted_result.append({"id": doc["_id"], "date": source["date"], "file_url": source["file_url"], "page": source["page"], "highlights": array_of_highlights })
+
+
+
+        return jsonify(formatted_result)
 
 api.add_resource(Tracks, '/tracks')  # Route_2
 api.add_resource(Employees_Name, '/employees/<employee_id>')  # Route_3
@@ -130,6 +183,7 @@ api.add_resource(Return_Ocr_Text, '/ocr-image')  # Route_3 POST
 api.add_resource(Return_hOcr, '/ocr-image')  # Route_3 GET - OCRing & Identifying page structure
 api.add_resource(Ocr_Text_And_Position, '/text-and-position')  # Route_3 GET - OCRing & word postion on page
 api.add_resource(Get_Record, '/get-record')  # Route_3 POST - Retrieve record
+api.add_resource(Search, '/search')  # Route_3 GET - Search ES
 
 if __name__ == '__main__':
     app.run()
