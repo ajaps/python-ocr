@@ -1,6 +1,8 @@
 blinker==1.4
+certifi==2020.6.20
 click==7.1.2
 dnspython==1.16.0
+elasticsearch==7.9.1
 Flask==1.1.1
 Flask-Jsonpify==1.5.0
 Flask-RESTful==0.3.7
@@ -21,5 +23,6 @@ redis==3.5.3
 rq==1.5.2
 six==1.15.0
 toml==0.10.1
+urllib3==1.25.10
 Werkzeug==0.16.0
 wrapt==1.12.1

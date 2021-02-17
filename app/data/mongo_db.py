@@ -1,6 +1,5 @@
-from mongoengine import connect, disconnect
 import os
-
+from mongoengine import connect, disconnect
 from dotenv import load_dotenv
 
 load_dotenv()

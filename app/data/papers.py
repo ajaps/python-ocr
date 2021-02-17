@@ -18,3 +18,4 @@ class Paper(EmbeddedDocument):
     top = ListField(IntField(required=True))
     width = ListField(IntField(required=True))
     word_num = ListField(IntField(required=True))
+    total_confidence = IntField(required=True)
