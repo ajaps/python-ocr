@@ -53,8 +53,10 @@ class Image_Ocr:
         for x in line_text:
             line = x.split("\t")
 
-            if line[11] != "text":
-                full_text += line[11] + " "
+            # Ignore blank text - where index 11 is blank(empty space).  This is necessary to avoid "IndexError: list index out of range" error
+            if len(line) > 11: 
+                if line[11] != "text":
+                    full_text += line[11] + " "
 
             if line[10] != '' and line[10] != "conf":
                 confi = int(line[10])
