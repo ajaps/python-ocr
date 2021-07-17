@@ -18,6 +18,26 @@
    brew install redis
   ```
 
+  Install ElasticSearch 7.13(ES)
+  https://www.elastic.co/guide/en/elasticsearch/reference/current/brew.html
+  ```
+    brew tap elastic/tap
+    brew install elastic/tap/elasticsearch-full
+  ```
+
+  Install MongoDB @4.2
+  https://docs.mongodb.com/v4.2/tutorial/install-mongodb-on-os-x/
+  ```
+    brew tap mongodb/brew
+    brew install mongodb-community@4.2
+  ```
+
+  Install Redis
+  ```
+    brew install redis
+  ```
+
+ Install python dependant libraries located in requirements.txt
   ```
    pip3 install -r requirements.txt
   ```
@@ -33,32 +53,30 @@
 
 - Create ES mapping
   ```
-    curl -X PUT "localhost:9200/paper_archives?pretty" -H 'Content-Type: application/json' -d'
+    curl -X PUT "localhost:9200/paper_archive?pretty" -H 'Content-Type: application/json' -d'
     {
       "mappings": {
-        "_doc" : {
-          "properties": {
-            "full_text": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword",
-                  "ignore_above": 256
-                }
+        "properties" : {
+          "full_text": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
               }
-            },
-            "file_url": { "type": "keyword"},
-            "date": {
-              "type": "date"
-            },
-            "page": { "type": "integer" },
-            "raw_text": { "type": "keyword" },
-            "conf": { "type": "long" },
-            "height": { "type": "integer" },
-            "left": { "type": "integer" },
-            "top": { "type": "integer" },
-            "width": { "type": "integer" }
-          }
+            }
+          },
+          "file_url": { "type": "keyword"},
+          "date": {
+            "type": "date"
+          },
+          "page": { "type": "integer" },
+          "raw_text": { "type": "keyword" },
+          "conf": { "type": "long" },
+          "height": { "type": "integer" },
+          "left": { "type": "integer" },
+          "top": { "type": "integer" },
+          "width": { "type": "integer" }
         }
       },
       "settings": {}
