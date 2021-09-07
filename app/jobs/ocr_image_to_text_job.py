@@ -28,7 +28,7 @@ def perform_ocr(document_id):
             top.append(ocr_text['raw_data']['top'][index])
             width.append(ocr_text['raw_data']['width'][index])
             left.append(ocr_text['raw_data']['left'][index])
-            confi = int(ocr_text['raw_data']['conf'][index])
+            confi = int(float(ocr_text['raw_data']['conf'][index]))
             if confi >= 0:
                 confidence.append(confi)
 
