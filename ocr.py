@@ -46,9 +46,9 @@ cv2.imwrite(filename, gray)
 
 # Example of adding any additional options.
 # custom_oem_psm_config = r'--oem 3 --psm 6'
-custom_oem_psm_config = ''
+custom_oem_psm_config = '--psm 6'
 
-text = pytesseract.image_to_string(Image.open(
+text = pytesseract.image_to_data(Image.open(
     filename), lang='eng', config=custom_oem_psm_config)
 # text = pytesseract.image_to_osd(Image.open(
     # filename), lang='eng', config=custom_oem_psm_config)
@@ -57,6 +57,23 @@ text = pytesseract.image_to_string(Image.open(
 
 # os.remove(filename)
 print(text)
+
+confidence_array = []
+full_text = ""
+
+line_text = text.split("\n")
+for x in line_text[1:]:
+    line = x.split("\t")
+
+    # Ignore blank text - where index 11 is blank(empty space).  This is necessary to avoid "IndexError: list index out of range" error
+    if len(line) > 11: 
+        full_text += line[11] + " "
+
+    confi = int(line[10])
+    confidence_array.append(confi)
+
+average = sum(confidence_array) / len(confidence_array)
+print("AVERAGE CONFIDENCE SCORE:", average)
 
 # Get a searchable PDF
 # pdf = pytesseract.image_to_pdf_or_hocr(image, extension='pdf')
@@ -68,6 +85,6 @@ cv2.imshow("Output", gray)
 # cv2.waitKey(0)
 
 # Command to run
-# python ocr.py --image images/Guardian-1968-06-31.jpg --p blur
-# python ocr.py --image images/page_1.jpg --p blur
+# python3 ocr.py --image images/Guardian-1968-06-31.jpg --p blur
+# python3 ocr.py --image images/page_1.jpg --p blur
 #

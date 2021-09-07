@@ -4,6 +4,9 @@ from PIL import Image
 import pytesseract
 from urllib.request import urlopen
 import ssl
+import cv2
+
+import app.service.pre_process_image as pre_process_image
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -32,14 +35,15 @@ class Image_Ocr:
         # return {'full_text': full_text, 'confidence': average, 'raw_data': text}
 
     def get_text_from_image(self):
-        custom_oem_psm_config = ''
+        custom_oem_psm_config = '--psm 6'
 
         try:
-            image_file = Image.open(urlopen(self.image_path))
-            # image_file = Image.open((self.image_path))
-            # text = pytesseract.image_to_string(
+            image = cv2.imread(args["image"])
+
+            processed_image = pre_process_image.process(image)
+            
             text = pytesseract.image_to_data(
-                image_file, lang='eng', config=custom_oem_psm_config
+                processed_image, lang='eng', config=custom_oem_psm_config
             )
             print(text)
             
@@ -50,18 +54,15 @@ class Image_Ocr:
         full_text = ""
 
         line_text = text.split("\n")
-        for x in line_text:
+        for x in line_text[1:]:
             line = x.split("\t")
 
             # Ignore blank text - where index 11 is blank(empty space).  This is necessary to avoid "IndexError: list index out of range" error
             if len(line) > 11: 
-                if line[11] != "text":
-                    full_text += line[11] + " "
+                full_text += line[11] + " "
 
-            if line[10] != '' and line[10] != "conf":
                 confi = int(line[10])
-                if confi >= 0:
-                    confidence_array.append(confi)
+                confidence_array.append(confi)
 
         average = sum(confidence_array) / len(confidence_array)
         print(average)

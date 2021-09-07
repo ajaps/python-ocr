@@ -4,6 +4,7 @@
 
 ## Dependencies
 
+- tesseract 5.0.0-beta
 - Python3
 - pytesseract
 - opencv
